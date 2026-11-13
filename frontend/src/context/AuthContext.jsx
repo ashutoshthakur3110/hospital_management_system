@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext(null);
 
-// Default sample users available in Context for immediate testing
 const INITIAL_DEMO_USERS = [
   {
     id: 'MED-PT-100234',
@@ -41,13 +40,10 @@ const INITIAL_DEMO_USERS = [
 ];
 
 export const AuthProvider = ({ children }) => {
-  // Pure in-memory Context state (no localStorage)
   const [registeredUsers, setRegisteredUsers] = useState(INITIAL_DEMO_USERS);
   const [currentUser, setCurrentUser] = useState(null);
 
-  // Register a new user in Context
   const registerUser = (userData) => {
-    // Check if email already registered
     const emailExists = registeredUsers.some(
       (u) => u.email.trim().toLowerCase() === userData.email.trim().toLowerCase()
     );
@@ -59,7 +55,7 @@ export const AuthProvider = ({ children }) => {
       };
     }
 
-    // Generate unique Hospital ID prefix based on role
+    // Generate unique Hospital ID
     const prefix = userData.role === 'patient' ? 'PT' : userData.role === 'doctor' ? 'DOC' : 'STF';
     const generatedId = `MED-${prefix}-${Math.floor(100000 + Math.random() * 900000)}`;
 
@@ -149,13 +145,4 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
-};
-
-// Custom hook for convenient consumption
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
 };
