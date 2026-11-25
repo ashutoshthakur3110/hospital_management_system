@@ -1,6 +1,18 @@
+
 import React, { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext(null);
+
+// Custom hook to access AuthContext
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error('useAuth must be used inside AuthProvider');
+  }
+
+  return context;
+};
 
 const INITIAL_DEMO_USERS = [
   {
@@ -43,21 +55,33 @@ export const AuthProvider = ({ children }) => {
   const [registeredUsers, setRegisteredUsers] = useState(INITIAL_DEMO_USERS);
   const [currentUser, setCurrentUser] = useState(null);
 
+  // Register new user
   const registerUser = (userData) => {
     const emailExists = registeredUsers.some(
-      (u) => u.email.trim().toLowerCase() === userData.email.trim().toLowerCase()
+      (u) =>
+        u.email.trim().toLowerCase() ===
+        userData.email.trim().toLowerCase()
     );
 
     if (emailExists) {
       return {
         success: false,
-        message: 'An account with this email address already exists. Please sign in.',
+        message:
+          'An account with this email address already exists. Please sign in.',
       };
     }
 
     // Generate unique Hospital ID
-    const prefix = userData.role === 'patient' ? 'PT' : userData.role === 'doctor' ? 'DOC' : 'STF';
-    const generatedId = `MED-${prefix}-${Math.floor(100000 + Math.random() * 900000)}`;
+    const prefix =
+      userData.role === 'patient'
+        ? 'PT'
+        : userData.role === 'doctor'
+        ? 'DOC'
+        : 'STF';
+
+    const generatedId = `MED-${prefix}-${Math.floor(
+      100000 + Math.random() * 900000
+    )}`;
 
     const newUser = {
       ...userData,
@@ -65,7 +89,7 @@ export const AuthProvider = ({ children }) => {
       createdAt: new Date().toISOString(),
     };
 
-    // Store in Context state
+    // Store user in Context state
     setRegisteredUsers((prev) => [newUser, ...prev]);
 
     return {
@@ -75,7 +99,7 @@ export const AuthProvider = ({ children }) => {
     };
   };
 
-  // Evaluate / authenticate login against Context state
+  // Login user
   const loginUser = ({ identifier, password, role }) => {
     const cleanId = (identifier || '').trim().toLowerCase();
     const cleanPassword = (password || '').trim();
@@ -83,11 +107,12 @@ export const AuthProvider = ({ children }) => {
     if (!cleanId || !cleanPassword) {
       return {
         success: false,
-        message: 'Please provide both email/hospital ID and password.',
+        message:
+          'Please provide both email/hospital ID and password.',
       };
     }
 
-    // Find user by email or assigned ID from Context state
+    // Find user by email, Hospital ID, or Staff ID
     const foundUser = registeredUsers.find(
       (u) =>
         u.email.toLowerCase() === cleanId ||
@@ -98,11 +123,12 @@ export const AuthProvider = ({ children }) => {
     if (!foundUser) {
       return {
         success: false,
-        message: 'No registered account found with that email or ID. Please check or register first.',
+        message:
+          'No registered account found with that email or ID. Please check or register first.',
       };
     }
 
-    // Verify role if specified
+    // Verify role
     if (role && foundUser.role !== role) {
       return {
         success: false,
@@ -118,8 +144,9 @@ export const AuthProvider = ({ children }) => {
       };
     }
 
-    // Successful login - set in Context
+    // Successful login
     setCurrentUser(foundUser);
+
     return {
       success: true,
       message: `Welcome back, ${foundUser.fullName}!`,
@@ -127,7 +154,7 @@ export const AuthProvider = ({ children }) => {
     };
   };
 
-  // Sign out - clears active session in Context
+  // Logout user
   const logoutUser = () => {
     setCurrentUser(null);
   };
