@@ -71,17 +71,28 @@ export const AuthProvider = ({ children }) => {
       };
     }
 
-    // Generate unique Hospital ID
+    const isHospitalStaff =
+      userData.role === 'staff' &&
+      ['reception', 'billing'].includes(userData.staffRole);
     const prefix =
       userData.role === 'patient'
-        ? 'PT'
+        ? 'MED-PAT-'
         : userData.role === 'doctor'
-        ? 'DOC'
-        : 'STF';
+          ? 'MED-DOC-'
+          : isHospitalStaff
+            ? 'MED-STF-'
+            : 'MED-';
 
-    const generatedId = `MED-${prefix}-${Math.floor(
-      100000 + Math.random() * 900000
-    )}`;
+    const nextIdNumber =
+      registeredUsers.reduce((maxId, user) => {
+        if (!user.createdAt || !user.id?.startsWith(prefix)) return maxId;
+
+        const idNumber = Number(user.id.slice(prefix.length));
+        return Number.isInteger(idNumber) ? Math.max(maxId, idNumber) : maxId;
+      }, 0) + 1;
+    const generatedId = isHospitalStaff
+      ? `${prefix}${Math.floor(100000 + Math.random() * 900000)}`
+      : `${prefix}${nextIdNumber}`;
 
     const newUser = {
       ...userData,

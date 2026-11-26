@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
+import medicalLicenses from '../../utils/medicalLicense.js';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -33,7 +34,6 @@ const Register = () => {
   });
 
   const [errorMessage, setErrorMessage] = useState('');
-  const [registeredSuccessUser, setRegisteredSuccessUser] = useState(null);
 
   // Field change handler
   const handleInputChange = (e) => {
@@ -140,6 +140,14 @@ const Register = () => {
         setErrorMessage('Please select your medical specialization.');
         return;
       }
+      if (!formData.licenseNumber.trim()) {
+        setErrorMessage('Please enter your medical license number.');
+        return;
+      }
+      if (!medicalLicenses.includes(formData.licenseNumber.trim().toUpperCase())) {
+        setErrorMessage('Medical license number could not be verified.');
+        return;
+      }
     } else if (selectedRole === 'staff') {
       if (!formData.staffRole) {
         setErrorMessage('Please select your hospital department/role.');
@@ -162,7 +170,7 @@ const Register = () => {
       }),
       ...(selectedRole === 'doctor' && {
         specialization: formData.specialization,
-        licenseNumber: formData.licenseNumber,
+        licenseNumber: formData.licenseNumber.trim().toUpperCase(),
         qualifications: formData.qualifications,
         experienceYears: formData.experienceYears,
       }),
@@ -175,100 +183,10 @@ const Register = () => {
     if (!result.success) {
       setErrorMessage(result.message);
     } else {
-      setRegisteredSuccessUser(result.user);
       setErrorMessage('');
+      navigate('/login');
     }
   };
-
-  // SUCCESS REGISTRATION VIEW
-  if (registeredSuccessUser) {
-    return (
-      <div className="w-full max-w-xl mx-auto my-auto bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-100 p-6 sm:p-8 md:p-10 text-center">
-        <div className="w-16 h-16 bg-teal-50 border-4 border-teal-100 rounded-full flex items-center justify-center mx-auto mb-4 text-teal-600">
-          <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
-
-        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-teal-100 text-teal-800 mb-2">
-          Stored in Context
-        </span>
-
-        <h2 className="text-2xl font-extrabold text-slate-800">
-          Registration Complete!
-        </h2>
-        <p className="text-sm text-slate-500 mt-1 mb-6">
-          Your profile has been saved in the system and is ready to sign in.
-        </p>
-
-        {/* User Card */}
-        <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-left space-y-2 mb-6 text-sm">
-          <div className="flex justify-between items-center pb-2 border-b border-slate-200">
-            <span className="text-slate-500">Assigned Hospital ID:</span>
-            <span className="font-mono font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded border border-teal-200 text-xs">
-              {registeredSuccessUser.id}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-slate-500">Full Name:</span>
-            <span className="font-semibold text-slate-800">{registeredSuccessUser.fullName}</span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-slate-500">Email:</span>
-            <span className="text-slate-700">{registeredSuccessUser.email}</span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-slate-500">Role:</span>
-            <span className="font-semibold capitalize text-teal-600">{registeredSuccessUser.role}</span>
-          </div>
-          {registeredSuccessUser.bloodGroup && (
-            <div className="flex justify-between items-center">
-              <span className="text-slate-500">Blood Group:</span>
-              <span className="font-semibold text-slate-800">{registeredSuccessUser.bloodGroup}</span>
-            </div>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <button
-            type="button"
-            onClick={() => navigate('/login')}
-            className="w-full py-3 px-6 rounded-xl bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white font-semibold text-sm shadow-md shadow-teal-600/20 transition cursor-pointer"
-          >
-            Proceed to Sign In
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              setRegisteredSuccessUser(null);
-              setFormData({
-                fullName: '',
-                email: '',
-                phone: '',
-                bloodGroup: '',
-                gender: '',
-                dateOfBirth: '',
-                emergencyPhone: '',
-                specialization: '',
-                licenseNumber: '',
-                qualifications: '',
-                experienceYears: '',
-                staffRole: '',
-                staffId: '',
-                agreeToTerms: false,
-              });
-              setPassword('');
-              setConfirmPassword('');
-            }}
-            className="w-full py-2 px-4 text-xs font-semibold text-slate-600 hover:text-slate-900 transition cursor-pointer"
-          >
-            Register Another Profile
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-[#f4f9f2] px-5 py-5 sm:px-10 sm:py-6 lg:px-12 lg:py-2 xl:px-16">
@@ -359,10 +277,10 @@ const Register = () => {
               onChange={handleInputChange}
               placeholder={
                 selectedRole === 'doctor'
-                  ? 'e.g. Dr. Sarah Jenkins'
+                  ? 'e.g. Dr. Ashutosh thakur'
                   : selectedRole === 'staff'
-                  ? 'e.g. Michael Scott'
-                  : 'e.g. John Doe'
+                  ? 'e.g. Naman Shrivastava'
+                  : 'e.g. Ujjwal Verma'
               }
               className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition"
             />
@@ -386,7 +304,7 @@ const Register = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                placeholder="name@hospital.org"
+                placeholder="name@gmail.com"
                 className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition"
               />
             </div>
@@ -407,7 +325,7 @@ const Register = () => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
-                placeholder="+1 (555) 000-0000"
+                placeholder="+91 9876543210"
                 className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition"
               />
             </div>
@@ -482,7 +400,7 @@ const Register = () => {
                   name="emergencyPhone"
                   value={formData.emergencyPhone}
                   onChange={handleInputChange}
-                  placeholder="+1 (555) 999-8888"
+                  placeholder="+91 9123456789"
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition"
                 />
               </div>
@@ -520,14 +438,14 @@ const Register = () => {
 
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-1">
-                  Medical License / Council No.
+                  Medical License / Council No. <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="text"
                   name="licenseNumber"
                   value={formData.licenseNumber}
                   onChange={handleInputChange}
-                  placeholder="e.g. MED-REG-749102"
+                  placeholder="e.g. MED-REG-1001"
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition"
                 />
               </div>
