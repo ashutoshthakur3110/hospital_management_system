@@ -1,7 +1,9 @@
+import { memo } from 'react';
+
 const AuthSideBar = () => {
   return (
     <aside
-      className="relative hidden min-h-screen overflow-hidden bg-cover bg-center text-white lg:flex lg:w-1/2 lg:shrink-0 lg:flex-col lg:justify-between lg:p-10 xl:p-14"
+      className="relative hidden min-h-screen overflow-hidden bg-cover bg-center text-white lg:flex lg:h-screen lg:min-h-0 lg:w-1/2 lg:shrink-0 lg:flex-col lg:justify-between lg:p-10 xl:p-14"
       style={{
         backgroundImage:
           "linear-gradient(180deg, rgba(10, 34, 24, 0.12) 0%, rgba(10, 34, 24, 0.18) 42%, rgba(10, 34, 24, 0.86) 100%), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1600&q=85')",
@@ -36,4 +38,4 @@ const AuthSideBar = () => {
   );
 };
 
-export default AuthSideBar;
+export default memo(AuthSideBar);

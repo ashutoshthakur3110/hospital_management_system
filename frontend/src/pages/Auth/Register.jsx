@@ -5,7 +5,6 @@ import { useAuth } from '../../context/AuthContext.jsx';
 const Register = () => {
   const navigate = useNavigate();
   const { registerUser } = useAuth();
-
   const [selectedRole, setSelectedRole] = useState('patient');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -272,44 +271,9 @@ const Register = () => {
   }
 
   return (
-    <div className="grid min-h-screen w-full bg-[#f4f9f2] lg:grid-cols-2">
-      <aside
-        className="relative hidden min-h-screen overflow-hidden bg-cover bg-center text-white lg:flex lg:flex-col lg:justify-between lg:p-10 xl:p-14"
-        style={{
-          backgroundImage:
-            "linear-gradient(180deg, rgba(10, 34, 24, 0.12) 0%, rgba(10, 34, 24, 0.18) 42%, rgba(10, 34, 24, 0.86) 100%), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1600&q=85')",
-        }}
-      >
-        <div className="absolute inset-0 bg-emerald-950/10" />
-        <div className="relative z-10 flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/60 bg-white text-emerald-900 shadow-lg">
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4m8-8a8 8 0 100 16 8 8 0 000-16z" />
-            </svg>
-          </div>
-          <div>
-            <p className="text-lg font-semibold tracking-tight text-white">MedCare</p>
-            <p className="text-xs text-white/75">Care operations, in balance</p>
-          </div>
-        </div>
-
-        <div className="relative z-10 max-w-xl pb-2">
-          <p className="mb-5 flex items-center gap-2 text-sm font-medium text-white/90">
-            <span className="h-2 w-2 rounded-full bg-amber-300" />
-            For the people who care
-          </p>
-          <h2 className="text-4xl font-semibold leading-tight tracking-tight xl:text-5xl">
-            A calmer center for every shift.
-          </h2>
-          <p className="mt-5 max-w-md text-base leading-relaxed text-white/85">
-            Bring every team, room, and daily detail into a steadier rhythm of care.
-          </p>
-        </div>
-      </aside>
-
-      <section className="flex min-h-screen items-center justify-center px-5 py-10 sm:px-10 lg:px-12 xl:px-16">
+    <div className="flex min-h-screen w-full items-center justify-center bg-[#f4f9f2] px-5 py-5 sm:px-10 sm:py-6 lg:px-12 lg:py-2 xl:px-16">
         <div className="w-full max-w-[520px]">
-          <div className="mb-8 lg:mb-9">
+          <div className="mb-6 lg:mb-7">
             <div className="mb-7 flex items-center gap-3 lg:hidden">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-900 text-white">
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -336,7 +300,7 @@ const Register = () => {
           </div>
 
       {/* Role Selection Tabs */}
-      <div className="mb-6">
+      <div className="mb-6 lg:mb-5">
         <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-500">
           Create account as
         </label>
@@ -376,7 +340,7 @@ const Register = () => {
       )}
 
       {/* Registration Form */}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 lg:space-y-3">
         {/* Full Name */}
         <div>
           <label className="block text-sm font-semibold text-slate-700 mb-1">
@@ -800,14 +764,13 @@ const Register = () => {
       </form>
 
       {/* Footer Navigation */}
-      <div className="mt-6 border-t border-emerald-900/10 pt-5 text-center text-xs text-slate-500">
+      <div className="mt-6 border-t border-emerald-900/10 pt-5 text-center text-sm text-slate-500">
         Already have an account?{' '}
         <Link to="/login" className="text-teal-600 hover:text-teal-700 font-bold hover:underline ml-1">
           Sign In
         </Link>
       </div>
         </div>
-      </section>
     </div>
   );
 };

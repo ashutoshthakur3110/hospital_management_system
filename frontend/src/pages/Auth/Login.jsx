@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext.jsx';
 import { getRoleHomeRoute } from '../../utils/roleHomeRoute.js';
 
 const Login = () => {
-  const { loginUser, currentUser, registeredUsers } = useAuth();
+  const { loginUser, currentUser } = useAuth();
   const navigate = useNavigate();
 
   const [selectedRole, setSelectedRole] = useState('patient');
@@ -13,14 +13,13 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [statusMessage, setStatusMessage] = useState({ type: '', text: '' });
-  const [showAccountsDrawer, setShowAccountsDrawer] = useState(false);
 
   useEffect(() => {
     if (!currentUser) return undefined;
 
     const timerId = window.setTimeout(() => {
       navigate(getRoleHomeRoute(currentUser), { replace: true });
-    }, 3000);
+    }, 2000);
 
     return () => window.clearTimeout(timerId);
   }, [currentUser, navigate]);
@@ -63,14 +62,6 @@ const Login = () => {
         text: result.message,
       });
     }
-  };
-
-  // Quick auto-select a registered user from context for instant testing
-  const handleQuickSelect = (user) => {
-    setSelectedRole(user.role);
-    setIdentifier(user.email);
-    setPassword(user.password || 'Password@123');
-    setStatusMessage({ type: '', text: '' });
   };
 
   // AUTHENTICATED ACTIVE SESSION VIEW
@@ -305,45 +296,6 @@ const Login = () => {
           </button>
         </div>
       </form>
-
-      {/* Context Registered Accounts Drawer (Testing Assistant) */}
-      <div className="mt-5 border-t border-emerald-900/10 pt-4">
-        <button
-          type="button"
-          onClick={() => setShowAccountsDrawer(!showAccountsDrawer)}
-          className="w-full flex items-center justify-between py-1 text-xs text-slate-500 transition hover:text-emerald-800 cursor-pointer"
-        >
-          <span className="font-medium flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-700 animate-pulse"></span>
-            Registered Accounts in Context ({registeredUsers.length})
-          </span>
-          <span className="text-slate-400 font-mono text-[10px]">
-            {showAccountsDrawer ? '▲ Hide' : '▼ Show'}
-          </span>
-        </button>
-
-        {showAccountsDrawer && (
-          <div className="mt-2 space-y-2 max-h-48 overflow-y-auto pr-1">
-            {registeredUsers.map((u) => (
-              <div
-                key={u.id || u.email}
-                onClick={() => handleQuickSelect(u)}
-                className="p-2.5 rounded-lg bg-slate-50 hover:bg-emerald-50/60 border border-slate-200/80 hover:border-emerald-300 cursor-pointer transition text-left text-xs"
-              >
-                <div className="flex justify-between items-center mb-0.5">
-                  <span className="font-semibold text-slate-800">{u.fullName}</span>
-                  <span className="capitalize px-1.5 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-900 font-medium">
-                    {u.role}
-                  </span>
-                </div>
-                <div className="text-[11px] text-slate-500 truncate">
-                  {u.email} • ID: <span className="font-mono">{u.id}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
 
       {/* Footer Navigation */}
       <div className="mt-5 border-t border-emerald-900/10 pt-4 text-center text-xs text-slate-500">

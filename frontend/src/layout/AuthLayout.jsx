@@ -5,10 +5,15 @@ const AuthLayout = () => {
   const { pathname } = useLocation();
   const isRegisterPage = pathname === '/';
   const isLoginPage = pathname === '/login';
+  const isAuthPage = isRegisterPage || isLoginPage;
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-slate-50 text-slate-800">
-      {isLoginPage && <AuthSideBar />}
+    <div
+      className={`min-h-screen flex flex-col lg:flex-row bg-slate-50 text-slate-800 ${
+        isAuthPage ? 'lg:h-screen lg:overflow-hidden' : ''
+      }`}
+    >
+      {isAuthPage && <AuthSideBar />}
       <main
         className={`flex-1 min-w-0 overflow-y-auto ${
           isRegisterPage
