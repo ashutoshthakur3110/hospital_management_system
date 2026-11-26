@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
 
@@ -184,7 +184,7 @@ const Register = () => {
   // SUCCESS REGISTRATION VIEW
   if (registeredSuccessUser) {
     return (
-      <div className="w-full max-w-xl mx-auto bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-100 p-6 sm:p-8 md:p-10 text-center">
+      <div className="w-full max-w-xl mx-auto my-auto bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-100 p-6 sm:p-8 md:p-10 text-center">
         <div className="w-16 h-16 bg-teal-50 border-4 border-teal-100 rounded-full flex items-center justify-center mx-auto mb-4 text-teal-600">
           <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
@@ -272,27 +272,73 @@ const Register = () => {
   }
 
   return (
-    <div className="w-full max-w-xl mx-auto bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-100 p-6 sm:p-8 md:p-10">
-      {/* Header */}
-      <div className="mb-6">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200/60 text-teal-700 text-xs font-semibold mb-2">
-          <svg className="w-3.5 h-3.5 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 2a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V3a1 1 0 011-1z" clipRule="evenodd" />
-          </svg>
-          Hospital Portal
+    <div className="grid min-h-screen w-full bg-[#f4f9f2] lg:grid-cols-2">
+      <aside
+        className="relative hidden min-h-screen overflow-hidden bg-cover bg-center text-white lg:flex lg:flex-col lg:justify-between lg:p-10 xl:p-14"
+        style={{
+          backgroundImage:
+            "linear-gradient(180deg, rgba(10, 34, 24, 0.12) 0%, rgba(10, 34, 24, 0.18) 42%, rgba(10, 34, 24, 0.86) 100%), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1600&q=85')",
+        }}
+      >
+        <div className="absolute inset-0 bg-emerald-950/10" />
+        <div className="relative z-10 flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/60 bg-white text-emerald-900 shadow-lg">
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4m8-8a8 8 0 100 16 8 8 0 000-16z" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-lg font-semibold tracking-tight text-white">MedCare</p>
+            <p className="text-xs text-white/75">Care operations, in balance</p>
+          </div>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-          Create an Account
-        </h1>
-        <p className="text-sm text-slate-500 mt-1">
-          Register to access hospital services, appointments, and records.
-        </p>
-      </div>
+
+        <div className="relative z-10 max-w-xl pb-2">
+          <p className="mb-5 flex items-center gap-2 text-sm font-medium text-white/90">
+            <span className="h-2 w-2 rounded-full bg-amber-300" />
+            For the people who care
+          </p>
+          <h2 className="text-4xl font-semibold leading-tight tracking-tight xl:text-5xl">
+            A calmer center for every shift.
+          </h2>
+          <p className="mt-5 max-w-md text-base leading-relaxed text-white/85">
+            Bring every team, room, and daily detail into a steadier rhythm of care.
+          </p>
+        </div>
+      </aside>
+
+      <section className="flex min-h-screen items-center justify-center px-5 py-10 sm:px-10 lg:px-12 xl:px-16">
+        <div className="w-full max-w-[520px]">
+          <div className="mb-8 lg:mb-9">
+            <div className="mb-7 flex items-center gap-3 lg:hidden">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-900 text-white">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4m8-8a8 8 0 100 16 8 8 0 000-16z" />
+                </svg>
+              </div>
+              <span className="font-semibold text-emerald-950">MedCare</span>
+            </div>
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-emerald-800">
+              {selectedRole === 'staff' ? 'Staff access' : `${selectedRole} access`}
+            </p>
+            <h1 className="text-3xl font-semibold tracking-tight text-[#13251b] sm:text-4xl">
+              {selectedRole === 'staff'
+                ? 'Create your workspace'
+                : selectedRole === 'doctor'
+                  ? 'Join your care team'
+                  : 'Create your account'}
+            </h1>
+            <p className="mt-3 max-w-md text-sm leading-6 text-slate-600">
+              {selectedRole === 'staff'
+                ? 'Set up a calm, connected home for your hospital team.'
+                : 'Create your profile to access care, appointments, and records.'}
+            </p>
+          </div>
 
       {/* Role Selection Tabs */}
       <div className="mb-6">
-        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
-          Register As
+        <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-500">
+          Create account as
         </label>
         <div className="grid grid-cols-3 gap-2">
           {[
@@ -307,10 +353,10 @@ const Register = () => {
                 setSelectedRole(role.id);
                 setErrorMessage('');
               }}
-              className={`py-2 px-3 text-xs sm:text-sm font-semibold rounded-xl border transition-all cursor-pointer ${
+              className={`rounded-lg border px-3 py-2.5 text-xs font-semibold transition-all cursor-pointer sm:text-sm ${
                 selectedRole === role.id
-                  ? 'border-teal-500 bg-teal-50 text-teal-700 shadow-sm ring-2 ring-teal-500/20'
-                  : 'border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
+                  ? 'border-emerald-800 bg-emerald-50 text-emerald-900 shadow-sm ring-2 ring-emerald-800/10'
+                  : 'border-slate-200 bg-white/70 text-slate-600 hover:border-slate-300 hover:bg-white'
               }`}
             >
               {role.label}
@@ -746,7 +792,7 @@ const Register = () => {
         <div className="pt-2">
           <button
             type="submit"
-            className="w-full py-3 px-6 rounded-xl bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white font-semibold text-sm shadow-md shadow-teal-600/20 transition cursor-pointer"
+            className="w-full rounded-lg bg-emerald-900 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-emerald-900/15 transition hover:bg-emerald-950 active:bg-black cursor-pointer"
           >
             Create {selectedRole === 'patient' ? 'Patient' : selectedRole === 'doctor' ? 'Doctor' : 'Staff'} Account
           </button>
@@ -754,12 +800,14 @@ const Register = () => {
       </form>
 
       {/* Footer Navigation */}
-      <div className="mt-6 pt-5 border-t border-slate-100 text-center text-xs text-slate-500">
+      <div className="mt-6 border-t border-emerald-900/10 pt-5 text-center text-xs text-slate-500">
         Already have an account?{' '}
         <Link to="/login" className="text-teal-600 hover:text-teal-700 font-bold hover:underline ml-1">
           Sign In
         </Link>
       </div>
+        </div>
+      </section>
     </div>
   );
 };

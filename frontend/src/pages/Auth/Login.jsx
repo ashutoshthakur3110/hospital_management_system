@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
+import { getRoleHomeRoute } from '../../utils/roleHomeRoute.js';
 
 const Login = () => {
-  const { loginUser, currentUser, logoutUser, registeredUsers } = useAuth();
+  const { loginUser, currentUser, registeredUsers } = useAuth();
+  const navigate = useNavigate();
 
   const [selectedRole, setSelectedRole] = useState('patient');
   const [identifier, setIdentifier] = useState('');
@@ -12,6 +14,16 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [statusMessage, setStatusMessage] = useState({ type: '', text: '' });
   const [showAccountsDrawer, setShowAccountsDrawer] = useState(false);
+
+  useEffect(() => {
+    if (!currentUser) return undefined;
+
+    const timerId = window.setTimeout(() => {
+      navigate(getRoleHomeRoute(currentUser), { replace: true });
+    }, 3000);
+
+    return () => window.clearTimeout(timerId);
+  }, [currentUser, navigate]);
 
   // Handle Login Evaluation
   const handleSubmit = (e) => {
@@ -64,14 +76,14 @@ const Login = () => {
   // AUTHENTICATED ACTIVE SESSION VIEW
   if (currentUser) {
     return (
-      <div className="w-full max-w-md mx-auto bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-100 p-6 sm:p-8 md:p-10 text-center">
-        <div className="w-16 h-16 bg-teal-50 border-4 border-teal-100 rounded-full flex items-center justify-center mx-auto mb-4 text-teal-600">
+      <div className="w-full max-w-md mx-auto rounded-2xl border border-emerald-900/10 bg-white/80 p-6 text-center shadow-xl shadow-emerald-950/5 sm:p-8 md:p-10">
+        <div className="w-16 h-16 bg-emerald-50 border-4 border-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-700">
           <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
           </svg>
         </div>
 
-        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-teal-100 text-teal-800 mb-2">
+        <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-emerald-100 text-emerald-900 mb-2">
           Authenticated Session
         </span>
 
@@ -79,14 +91,15 @@ const Login = () => {
           Welcome, {currentUser.fullName}!
         </h2>
         <p className="text-xs text-slate-500 mt-1 mb-6">
-          Logged in successfully as <strong className="capitalize text-teal-700">{currentUser.role}</strong>.
+          Logged in successfully as <strong className="capitalize text-emerald-800">{currentUser.role}</strong>.
+          {' '}Taking you to your workspace...
         </p>
 
         {/* Profile Card from Context */}
         <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-left space-y-2 mb-6 text-sm">
           <div className="flex justify-between items-center pb-2 border-b border-slate-200">
             <span className="text-slate-500">Hospital ID:</span>
-            <span className="font-mono font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded border border-teal-200 text-xs">
+            <span className="font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-xs">
               {currentUser.id}
             </span>
           </div>
@@ -107,53 +120,48 @@ const Login = () => {
           {currentUser.specialization && (
             <div className="flex justify-between items-center">
               <span className="text-slate-500">Specialty:</span>
-              <span className="font-semibold capitalize text-teal-700">{currentUser.specialization}</span>
+              <span className="font-semibold capitalize text-emerald-800">{currentUser.specialization}</span>
             </div>
           )}
           {currentUser.staffRole && (
             <div className="flex justify-between items-center">
               <span className="text-slate-500">Department:</span>
-              <span className="font-semibold capitalize text-teal-700">{currentUser.staffRole}</span>
+              <span className="font-semibold capitalize text-emerald-800">{currentUser.staffRole}</span>
             </div>
           )}
         </div>
 
-        <button
-          type="button"
-          onClick={() => {
-            logoutUser();
-            setStatusMessage({ type: '', text: '' });
-          }}
-          className="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition cursor-pointer"
-        >
-          Sign Out / Switch Account
-        </button>
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-md mx-auto bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-100 p-6 sm:p-8 md:p-10">
+    <div className="w-full max-w-[520px] mx-auto">
       {/* Header */}
-      <div className="mb-6">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200/60 text-teal-700 text-xs font-semibold mb-2">
-          <svg className="w-3.5 h-3.5 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 2a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V3a1 1 0 011-1z" clipRule="evenodd" />
-          </svg>
-          Hospital Portal
+      <div className="mb-8 lg:mb-9">
+        <div className="mb-7 flex items-center gap-3 lg:hidden">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-900 text-white">
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4m8-8a8 8 0 100 16 8 8 0 000-16z" />
+            </svg>
+          </div>
+          <span className="font-semibold text-emerald-950">MedCare</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-          Welcome Back
+        <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-emerald-800">
+          {selectedRole} access
+        </p>
+        <h1 className="text-3xl font-semibold tracking-tight text-[#13251b] sm:text-4xl">
+          Welcome back
         </h1>
-        <p className="text-sm text-slate-500 mt-1">
-          Sign in to your hospital management portal.
+        <p className="mt-3 max-w-md text-sm leading-6 text-slate-600">
+          Sign in to continue to your care workspace.
         </p>
       </div>
 
       {/* Role Picker (UI) */}
       <div className="mb-6">
-        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
-          Sign In As
+        <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-500">
+          Sign in as
         </label>
         <div className="grid grid-cols-3 gap-2">
           {[
@@ -168,10 +176,10 @@ const Login = () => {
                 setSelectedRole(role.id);
                 setStatusMessage({ type: '', text: '' });
               }}
-              className={`py-2 px-3 text-xs sm:text-sm font-semibold rounded-xl border transition-all cursor-pointer ${
+              className={`rounded-lg border px-3 py-2.5 text-xs font-semibold transition-all cursor-pointer sm:text-sm ${
                 selectedRole === role.id
-                  ? 'border-teal-500 bg-teal-50 text-teal-700 shadow-sm ring-2 ring-teal-500/20'
-                  : 'border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
+                  ? 'border-emerald-800 bg-emerald-50 text-emerald-900 shadow-sm ring-2 ring-emerald-800/10'
+                  : 'border-slate-200 bg-white/70 text-slate-600 hover:border-slate-300 hover:bg-white'
               }`}
             >
               {role.label}
@@ -223,7 +231,7 @@ const Login = () => {
                 if (statusMessage.text) setStatusMessage({ type: '', text: '' });
               }}
               placeholder="e.g. name@hospital.org or MED-PT-100234"
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-700/20 transition"
             />
           </div>
         </div>
@@ -234,7 +242,7 @@ const Login = () => {
             <label className="block text-sm font-semibold text-slate-700">
               Password
             </label>
-            <a href="#forgot" onClick={(e) => e.preventDefault()} className="text-xs text-teal-600 hover:underline font-semibold">
+            <a href="#forgot" onClick={(e) => e.preventDefault()} className="text-xs font-semibold text-emerald-800 hover:underline">
               Forgot password?
             </a>
           </div>
@@ -252,7 +260,7 @@ const Login = () => {
                 if (statusMessage.text) setStatusMessage({ type: '', text: '' });
               }}
               placeholder="Enter your password"
-              className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition"
+              className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-700/20 transition"
             />
             <button
               type="button"
@@ -281,7 +289,7 @@ const Login = () => {
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="h-4 w-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500 cursor-pointer"
+              className="h-4 w-4 rounded border-slate-300 text-emerald-800 focus:ring-emerald-700 cursor-pointer"
             />
             <span>Remember this device</span>
           </label>
@@ -291,7 +299,7 @@ const Login = () => {
         <div className="pt-2">
           <button
             type="submit"
-            className="w-full py-3 px-6 rounded-xl bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white font-semibold text-sm shadow-md shadow-teal-600/20 transition cursor-pointer"
+            className="w-full rounded-lg bg-emerald-900 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-emerald-900/15 transition hover:bg-emerald-950 active:bg-black cursor-pointer"
           >
             Sign In to {selectedRole === 'patient' ? 'Patient' : selectedRole === 'doctor' ? 'Doctor' : 'Staff'} Portal
           </button>
@@ -299,14 +307,14 @@ const Login = () => {
       </form>
 
       {/* Context Registered Accounts Drawer (Testing Assistant) */}
-      <div className="mt-5 pt-4 border-t border-slate-100">
+      <div className="mt-5 border-t border-emerald-900/10 pt-4">
         <button
           type="button"
           onClick={() => setShowAccountsDrawer(!showAccountsDrawer)}
-          className="w-full flex items-center justify-between text-xs text-slate-500 hover:text-teal-700 py-1 transition cursor-pointer"
+          className="w-full flex items-center justify-between py-1 text-xs text-slate-500 transition hover:text-emerald-800 cursor-pointer"
         >
           <span className="font-medium flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+            <span className="w-2 h-2 rounded-full bg-emerald-700 animate-pulse"></span>
             Registered Accounts in Context ({registeredUsers.length})
           </span>
           <span className="text-slate-400 font-mono text-[10px]">
@@ -320,11 +328,11 @@ const Login = () => {
               <div
                 key={u.id || u.email}
                 onClick={() => handleQuickSelect(u)}
-                className="p-2.5 rounded-lg bg-slate-50 hover:bg-teal-50/60 border border-slate-200/80 hover:border-teal-300 cursor-pointer transition text-left text-xs"
+                className="p-2.5 rounded-lg bg-slate-50 hover:bg-emerald-50/60 border border-slate-200/80 hover:border-emerald-300 cursor-pointer transition text-left text-xs"
               >
                 <div className="flex justify-between items-center mb-0.5">
                   <span className="font-semibold text-slate-800">{u.fullName}</span>
-                  <span className="capitalize px-1.5 py-0.5 rounded text-[10px] bg-teal-100 text-teal-800 font-medium">
+                  <span className="capitalize px-1.5 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-900 font-medium">
                     {u.role}
                   </span>
                 </div>
@@ -338,9 +346,9 @@ const Login = () => {
       </div>
 
       {/* Footer Navigation */}
-      <div className="mt-5 pt-4 border-t border-slate-100 text-center text-xs text-slate-500">
+      <div className="mt-5 border-t border-emerald-900/10 pt-4 text-center text-xs text-slate-500">
         Don't have an account?{' '}
-        <Link to="/" className="text-teal-600 hover:text-teal-700 font-bold hover:underline ml-1">
+        <Link to="/" className="ml-1 font-bold text-emerald-800 hover:text-emerald-950 hover:underline">
           Create an account
         </Link>
       </div>

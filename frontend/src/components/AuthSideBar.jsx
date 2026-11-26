@@ -1,73 +1,38 @@
-import React from 'react';
-
 const AuthSideBar = () => {
   return (
-    <div className="hidden lg:flex lg:w-1/2 xl:w-5/12 bg-gradient-to-br from-teal-800 via-teal-900 to-slate-900 text-white p-10 xl:p-14 flex-col justify-between relative overflow-hidden min-h-screen">
-
-      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-teal-500/20 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-cyan-500/20 blur-3xl pointer-events-none" />
-
+    <aside
+      className="relative hidden min-h-screen overflow-hidden bg-cover bg-center text-white lg:flex lg:w-1/2 lg:shrink-0 lg:flex-col lg:justify-between lg:p-10 xl:p-14"
+      style={{
+        backgroundImage:
+          "linear-gradient(180deg, rgba(10, 34, 24, 0.12) 0%, rgba(10, 34, 24, 0.18) 42%, rgba(10, 34, 24, 0.86) 100%), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1600&q=85')",
+      }}
+    >
+      <div className="absolute inset-0 bg-emerald-950/10" />
       <div className="relative z-10 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-teal-300 shadow-md">
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/60 bg-white text-emerald-900 shadow-lg">
+          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4m8-8a8 8 0 100 16 8 8 0 000-16z" />
           </svg>
         </div>
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-            MedCare
-          </h1>
-          <p className="text-xs text-teal-200/80">Hospital Management System</p>
+          <p className="text-lg font-semibold tracking-tight text-white">MedCare</p>
+          <p className="text-xs text-white/75">Care operations, in balance</p>
         </div>
       </div>
 
-      {/* Middle Content */}
-      <div className="relative z-10 my-auto py-8 space-y-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 border border-teal-400/30 text-teal-200 text-xs font-medium">
-          <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
-          Healthcare Management Platform
-        </div>
-
-        <h2 className="text-3xl xl:text-4xl font-extrabold text-white leading-tight">
-          Streamlining hospital workflows & patient care.
-        </h2>
-
-        <p className="text-sm text-teal-100/80 leading-relaxed max-w-md">
-          A unified system connecting doctors, patients, clinical staff, and pharmacies with real-time health records and scheduling.
+      <div className="relative z-10 max-w-xl pb-2">
+        <p className="mb-5 flex items-center gap-2 text-sm font-medium text-white/90">
+          <span className="h-2 w-2 rounded-full bg-amber-300" />
+          For the people who care
         </p>
-
-        {/* Feature Highlights */}
-        <div className="space-y-3 pt-2">
-          <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm p-3.5 rounded-xl border border-white/10">
-            <div className="w-8 h-8 rounded-lg bg-teal-400/20 flex items-center justify-center text-teal-300 shrink-0">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-white">Centralized Medical Records</p>
-              <p className="text-[11px] text-teal-200/70">Instant access to consultations, OPD notes & history</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm p-3.5 rounded-xl border border-white/10">
-            <div className="w-8 h-8 rounded-lg bg-teal-400/20 flex items-center justify-center text-teal-300 shrink-0">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-white">Pharmacy & Inventory Automation</p>
-              <p className="text-[11px] text-teal-200/70">Live medicine stock tracking and rapid dispatch</p>
-            </div>
-          </div>
-        </div>
+        <h2 className="text-4xl font-semibold leading-tight tracking-tight xl:text-5xl">
+          A calmer center for every shift.
+        </h2>
+        <p className="mt-5 max-w-md text-base leading-relaxed text-white/85">
+          Bring every team, room, and daily detail into a steadier rhythm of care.
+        </p>
       </div>
-
-      <div className="relative z-10 flex items-center justify-between text-xs text-teal-200/70 pt-6 border-t border-white/10">
-        <span>24/7 Hospital Care</span>
-      </div>
-    </div>
+    </aside>
   );
 };
 
